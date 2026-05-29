@@ -1,0 +1,386 @@
+/* ============================================
+   GALLERY PAGE — Dark Mosaic Magazine Style
+   High-contrast masonry with rich hover states
+   ============================================ */
+
+/* ── Filter Bar ── */
+.gallery-page__filters {
+  display: flex;
+  gap: 0;
+  flex-wrap: wrap;
+  margin-bottom: 56px;
+  border: 1px solid rgba(26,22,18,0.12);
+  width: fit-content;
+  max-width: 100%;
+}
+
+.gallery-page__filter-btn {
+  padding: 12px 24px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  background: transparent;
+  border: none;
+  border-right: 1px solid rgba(26,22,18,0.12);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.28s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-page__filter-btn::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.gallery-page__filter-btn:last-child {
+  border-right: none;
+}
+
+.gallery-page__filter-btn:hover {
+  color: var(--stone);
+  background: rgba(200,150,90,0.07);
+}
+
+.gallery-page__filter-btn:hover::after {
+  transform: scaleX(1);
+}
+
+.gallery-page__filter-btn--active {
+  background: var(--stone);
+  color: var(--gold) !important;
+}
+
+.gallery-page__filter-btn--active::after {
+  transform: scaleX(1);
+  background: var(--gold-light);
+}
+
+/* ── Masonry Grid ── */
+.gallery-page__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 200px;
+  gap: 4px;
+}
+
+/* ── Gallery Card ── */
+.gallery-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--stone-mid);
+}
+
+.gallery-card--large {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.gallery-card--tall {
+  grid-row: span 2;
+}
+
+.gallery-card--normal {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+/* SVG visual */
+.gallery-visual {
+  width: 100%;
+  height: 100%;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.gallery-card:hover .gallery-visual {
+  transform: scale(1.08);
+}
+
+/* Overlay — bottom-up reveal */
+.gallery-card__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(15,12,9,0.92) 0%,
+    rgba(15,12,9,0.4) 45%,
+    transparent 70%
+  );
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px 22px;
+}
+
+.gallery-card:hover .gallery-card__overlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Category chip */
+.gallery-card__cat {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--stone);
+  background: var(--gold);
+  padding: 3px 10px;
+  margin-bottom: 10px;
+  width: fit-content;
+  transform: translateY(6px);
+  opacity: 0;
+  transition: all 0.35s ease 0.05s;
+}
+
+.gallery-card:hover .gallery-card__cat {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.gallery-card__title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.25;
+  transform: translateY(8px);
+  opacity: 0;
+  transition: all 0.35s ease 0.1s;
+}
+
+/* Large cards get bigger title */
+.gallery-card--large .gallery-card__title {
+  font-size: 1.6rem;
+}
+
+.gallery-card:hover .gallery-card__title {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Corner number accent */
+.gallery-card::before {
+  content: attr(data-index);
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.12);
+  font-weight: 700;
+  z-index: 2;
+  transition: color 0.3s ease;
+}
+
+.gallery-card:hover::before {
+  color: rgba(200,150,90,0.4);
+}
+
+/* Border highlight on hover */
+.gallery-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  transition: border-color 0.35s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.gallery-card:hover::after {
+  border-color: rgba(200,150,90,0.35);
+}
+
+/* ── Lightbox ── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,8,6,0.95);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: fadeIn 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.lightbox__close {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(200,150,90,0.2);
+  color: var(--cream);
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.lightbox__close:hover {
+  background: var(--gold);
+  color: var(--stone);
+  border-color: var(--gold);
+  transform: rotate(90deg);
+}
+
+.lightbox__inner {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  max-width: 960px;
+  width: 100%;
+  background: var(--stone-mid);
+  overflow: hidden;
+  animation: fadeUp 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 40px 100px rgba(0,0,0,0.6);
+}
+
+.lightbox__visual {
+  height: 520px;
+  overflow: hidden;
+  position: relative;
+}
+
+.lightbox__visual svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Gold bar accent */
+.lightbox__visual::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+}
+
+.lightbox__info {
+  padding: 52px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+}
+
+/* Side accent line */
+.lightbox__info::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 40px;
+  bottom: 40px;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(200,150,90,0.3), transparent);
+}
+
+.lightbox__cat {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--gold);
+  display: block;
+  margin-bottom: 14px;
+}
+
+.lightbox__title {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.15;
+  margin-bottom: 20px;
+}
+
+.lightbox__desc {
+  font-size: 14px;
+  line-height: 1.8;
+  color: rgba(245,237,224,0.55);
+  margin-bottom: 32px;
+}
+
+/* Enquire button in lightbox */
+.lightbox__enquire {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--gold);
+  color: var(--stone);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  width: fit-content;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.lightbox__enquire:hover {
+  background: var(--gold-light);
+  transform: translateX(4px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 1000px) {
+  .gallery-page__grid { grid-template-columns: repeat(3, 1fr); }
+  .gallery-card--large { grid-column: span 2; }
+}
+
+@media (max-width: 768px) {
+  .gallery-page__filters {
+    width: 100%;
+    border: none;
+    gap: 6px;
+  }
+  .gallery-page__filter-btn {
+    border: 1.5px solid rgba(26,22,18,0.15) !important;
+    padding: 9px 16px;
+    border-radius: 0;
+  }
+  .gallery-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 160px;
+  }
+  .gallery-card--large { grid-column: span 2; grid-row: span 2; }
+  .gallery-card__overlay { opacity: 1; transform: none; }
+  .gallery-card__cat,
+  .gallery-card__title { opacity: 1; transform: none; }
+  .lightbox__inner { grid-template-columns: 1fr; }
+  .lightbox__visual { height: 260px; }
+  .lightbox__info { padding: 32px 28px; }
+}
+
+@media (max-width: 480px) {
+  .gallery-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 130px;
+  }
+}
