@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
@@ -16,7 +16,7 @@ function ScrollToTop() {
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <Router>
       <ScrollToTop />
       <Navbar />
       <Routes>
@@ -27,6 +27,6 @@ export default function App() {
         <Route path="/contact" element={<ContactPage />} />
       </Routes>
       <Footer />
-    </BrowserRouter>
+    </Router>
   )
 }
